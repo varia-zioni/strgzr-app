@@ -53,9 +53,6 @@ $ npm install
 An Android Emulator must be [created and launched manually](https://developer.android.com/studio/run/managing-avds).
 Then, from your command line, run these commands:
 ```bash
-# Perform the port forwarding
-$ adb reverse tcp:8081 tcp:8081
-
 # Run Android build
 $ npm run android
 ```
@@ -63,7 +60,7 @@ $ npm run android
 ### iOS Simulator
 ```bash
 # Run iOS build
-$ yarn run-ios
+$ npm run ios
 ```
 
 ### Physical devices
