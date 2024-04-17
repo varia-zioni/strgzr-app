@@ -56,15 +56,14 @@ Then, from your command line, run these commands:
 # Run Android build
 $ npm run android
 ```
-
 ### iOS Simulator
 ```bash
 # Run iOS build
 $ npm run ios
 ```
-
 ### Physical devices
 The React Native documentation provides a [useful guide](https://reactnative.dev/docs/running-on-device) for running projects on physical devices.
+
 ---
 
 # Architecture 🗼
