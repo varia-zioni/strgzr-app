@@ -1,4 +1,4 @@
-# strgz-app
+# strgzr-app
 
 React Native-based mobile application that uses GitHub's APIs to retrieve an user's list of repositories and relatives "Stargazer" (user that starred a repository) 
 
