@@ -7,6 +7,7 @@
 
 import React from 'react';
 import {
+  StatusBar,
   useColorScheme,
 } from 'react-native';
 
@@ -17,7 +18,6 @@ import MainScreen from './screens/main/MainScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -27,9 +27,13 @@ function App(): React.JSX.Element {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider >
-        <MainScreen />
-      </SafeAreaProvider>
+        <SafeAreaProvider>
+          <StatusBar
+            animated={true}
+            backgroundColor="#eddcf5"
+          />
+          <MainScreen />
+        </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
