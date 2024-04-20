@@ -59,7 +59,7 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
                 <Card style={{ marginHorizontal: 20, backgroundColor: "#eddcf5", maxHeight: 700 }}>
                     <View style={{ flexDirection: "row", alignItems: "center", padding: 15 }}>
                         <Icon source="github" size={25} color="#000000" />
-                        <Text variant="titleMedium" style={{ color: "#000000", marginLeft: 15 }}>{repo.full_name}</Text>
+                        <Text variant="titleMedium" style={{ color: "#000000", marginLeft: 15 }}>{repo.name}</Text>
                     </View>
                     <Divider bold />
                     <View style={{ flexDirection: "row", justifyContent: "center", padding: 15 }}>
