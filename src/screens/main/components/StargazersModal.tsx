@@ -1,18 +1,28 @@
-import { Portal, Card, Text, Modal, Divider, Icon, Avatar } from "react-native-paper";
+import { Portal, Card, Text, Modal, Divider, Icon, Avatar, ActivityIndicator } from "react-native-paper";
 import { Repository } from "../../../models/RepositoryModel";
 import { useEffect, useState } from "react";
 import { Stargazer } from "../../../models/StargazerModel";
 import { FlatList, View } from "react-native";
-import Config from "react-native-config";
+import { fetchRepositoryStargazers } from "../../../services/githubService";
 
-const ItemCard = ({ user }: { user: Stargazer }) => (
+const ItemCard = ({ user, index }: { user: Stargazer, index: number }) => (
     <>
-        <Divider bold />
-        <Card style={{ borderRadius: 0, paddingRight: 10 }}>
+        {index !== 0 && <Divider bold />}
+        <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: "#eddcf5" }}>
             <Card.Title
+                titleStyle={{ color: "#000000" }}
                 title={user.login}
                 left={() =>
-                    <Avatar.Image size={24} source={{ uri: user.avatar_url }} />
+                    <View style={{
+                        height: 35,
+                        width: 35,
+                        borderRadius: 50,
+                        backgroundColor: "white",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
+                        <Avatar.Image size={24} source={{ uri: user.avatar_url }} />
+                    </View>
                 }
             />
         </Card>
@@ -29,16 +39,7 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
     const [stargazersList, setStargazersList] = useState<Array<Stargazer> | undefined>(undefined);
 
     function getStargazers() {
-        fetch(
-            `https://api.github.com/repos/${repo.owner.login}/${repo.name}/stargazers`,
-            {
-                method: 'GET',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization':  `Beared ${Config.GIT_HUB_TOKEN}`
-                 }
-
-            })
+        fetchRepositoryStargazers({ username: repo.owner.login, repoName: repo.name })
             .then(async (data) => {
                 const response = await data.json();
                 if (response?.length > 0) {
@@ -55,15 +56,16 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
     return (
         <Portal>
             <Modal visible={openModal} onDismiss={() => setOpenModal(false)}>
-                <Card style={{ marginHorizontal: 20, backgroundColor: "#eddcf5", maxHeight: 500 }}>
+                <Card style={{ marginHorizontal: 20, backgroundColor: "#eddcf5", maxHeight: 700 }}>
                     <View style={{ flexDirection: "row", alignItems: "center", padding: 15 }}>
                         <Icon source="github" size={25} color="#000000" />
                         <Text variant="titleMedium" style={{ color: "#000000", marginLeft: 15 }}>{repo.full_name}</Text>
                     </View>
                     <Divider bold />
-                    <View style={{ flexDirection: "row", alignItems: "center", padding: 15 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "center", padding: 15 }}>
                         {
-                            !stargazersList ? <></>
+                            !stargazersList ?
+                                <ActivityIndicator size="large" />
                                 :
                                 stargazersList.length === 0 ?
                                     <>
@@ -74,12 +76,11 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
                                     </>
                                     :
                                     <FlatList
-                                        style={{ maxHeight: 400 }}
+                                        style={{ maxHeight: 600 }}
                                         data={stargazersList}
-                                        renderItem={({ item }) => <ItemCard user={item} />}
+                                        renderItem={({ item, index }) => <ItemCard user={item} index={index} />}
                                         keyExtractor={item => item.login}
                                     />
-
                         }
                     </View>
                 </Card>
