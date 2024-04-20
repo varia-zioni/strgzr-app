@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { View } from "react-native";
-import { Button, Searchbar, Surface } from "react-native-paper";
+import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
 
-export default function UserSearch({ searchTrigger, isFirstRender }: { searchTrigger: (username: string) => void; isFirstRender: boolean; }) {
+type Props = {
+    searchTrigger: (username: string) => void;
+    isFirstRender: boolean;
+    loading: boolean;
+}
+
+export default function UserSearch({ searchTrigger, isFirstRender, loading }: Props) {
     const [userInput, setUserInput] = useState<string>("");
 
     return (
@@ -13,24 +18,19 @@ export default function UserSearch({ searchTrigger, isFirstRender }: { searchTri
                 paddingVertical: 30,
                 backgroundColor: "#eddcf5",
                 height: isFirstRender ? "100%" : "auto",
-
                 justifyContent: "center",
-
             }}
         >
             <Searchbar
                 icon="github"
-                placeholder="GitHub username"
+                placeholder="Username GitHub"
                 onChangeText={setUserInput}
                 value={userInput}
                 style={{ marginBottom: 20 }}
             />
-            <View>
-                <Button mode="contained" onPress={() => searchTrigger(userInput)}>
-                    Recupera lista repository
-                </Button>
-            </View>
-
+            <Button mode="contained" onPress={() => searchTrigger(userInput)} style={{ height: 50, justifyContent: "center" }}>
+                {loading ? <ActivityIndicator color="#000000" /> : "Recupera lista repository"}
+            </Button>
         </Surface>
     );
 }

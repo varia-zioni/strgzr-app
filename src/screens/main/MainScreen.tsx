@@ -1,7 +1,8 @@
 import { Repository } from '../../models/RepositoryModel';
 import RepositoryList from './components/RepositoryList';
 import UserSearch from './components/UserSearch';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { fetchUserRepositories } from '../../services/githubService';
 
 export default function MainView() {
     const [repoList, setRepoList] = useState<Array<Repository> | undefined>(undefined);
@@ -12,26 +13,14 @@ export default function MainView() {
         if (isFirstRender) {
             setIsFirstRender(false);
         }
-        fetch(
-            `https://api.github.com/users/${username}/repos`,
-            {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(async (data) => {
-                const response = await data.json();
-                if (response?.length > 0) {
-                    setRepoList(response);
-                } else {
-                    setRepoList([]);
-                }
-            }).catch((_) => setRepoList([]));
+        fetchUserRepositories({username, pageLimit: 100, page:1})
+        .then(data => setRepoList(data));
     }
 
     return (
         <>
-            <UserSearch searchTrigger={getRepoList} isFirstRender={isFirstRender} />
-            {!isFirstRender && <RepositoryList repoList={repoList} />}
+            <UserSearch searchTrigger={getRepoList} isFirstRender={isFirstRender} loading={repoList === undefined}/>
+            {!isFirstRender && repoList && <RepositoryList repoList={repoList} />}
         </>
     );
 }
