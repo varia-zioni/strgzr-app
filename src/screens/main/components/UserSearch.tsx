@@ -2,13 +2,14 @@ import { useState } from "react";
 import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
 
 type Props = {
-    searchTrigger: (username: string) => void;
+    userInput: string;
+    setUserInput: (username: string) => void;
+    searchTrigger: () => void;
     isFirstRender: boolean;
     loading: boolean;
 }
 
-export default function UserSearch({ searchTrigger, isFirstRender, loading }: Props) {
-    const [userInput, setUserInput] = useState<string>("");
+export default function UserSearch({userInput, setUserInput, searchTrigger, isFirstRender, loading }: Props) {
 
     return (
         <Surface
@@ -28,7 +29,7 @@ export default function UserSearch({ searchTrigger, isFirstRender, loading }: Pr
                 value={userInput}
                 style={{ marginBottom: 20 }}
             />
-            <Button mode="contained" onPress={() => searchTrigger(userInput)} style={{ height: 50, justifyContent: "center" }}>
+            <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }}>
                 {loading ? <ActivityIndicator color="#000000" /> : "Recupera lista repository"}
             </Button>
         </Surface>

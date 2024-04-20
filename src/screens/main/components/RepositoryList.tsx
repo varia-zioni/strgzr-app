@@ -1,15 +1,14 @@
-import { Card, Chip, Divider, Icon, Searchbar, Text } from "react-native-paper";
+import { ActivityIndicator, Card, Chip, Divider, Icon, Searchbar, Text } from "react-native-paper";
 import { Repository } from "../../../models/RepositoryModel";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, TouchableHighlight, View } from "react-native";
 import StargazersModal from "./StargazersModal";
+import { fetchFilteredRepositories } from "../../../services/githubService";
 
 const ItemCard = (({ repo }: { repo: Repository }) => {
     const [openModal, setOpenModal] = useState<boolean>(false);
-
     return (
         <>
-            <Divider bold />
             <TouchableHighlight
                 onLongPress={() => setOpenModal(true)}
                 delayLongPress={200}
@@ -25,43 +24,107 @@ const ItemCard = (({ repo }: { repo: Repository }) => {
                     />
                 </Card>
             </TouchableHighlight>
-            <StargazersModal openModal={openModal} setOpenModal={setOpenModal} repo={repo} />
+            {openModal && <StargazersModal openModal={openModal} setOpenModal={setOpenModal} repo={repo} />}
         </>
     );
 })
 
-export default function RepositoryList({ repoList }: { repoList: Array<Repository> }) {
-    const [filteredRepoList, setFilteredRepoList] = useState<Array<Repository>>(repoList);
-    const [filterText, setFilterText] = useState<string>("");
+type Props = {
+    repoList: Array<Repository>;
+    setRepoList: (array: Array<Repository>) => void;
+    getFirstPage: () => void;
+    getNextPage: () => void;
+    getPreviousPage: () => void;
+    setLoading: (bool: boolean) => void;
+    loading: boolean;
+    userInput: string;
+};
 
-    function handleFilterList(textInput: string) {
-        setFilterText(textInput);
-        if (textInput.trim()) {
-            setFilteredRepoList(repoList.filter(el => el.name.toLowerCase().includes(textInput.toLowerCase())));
-        } else {
-            setFilteredRepoList(repoList);
+const pageLimit = 30;
+export default function RepositoryList(
+    { repoList, setRepoList, getFirstPage, getNextPage, getPreviousPage, loading, setLoading, userInput }: Props) {
+    const [filterText, setFilterText] = useState<string | undefined>(undefined);
+    const flatListRef = useRef()!;
+    const [page, setPage] = useState<number>(1);
+
+    function handleFilterList(newPage: number) {
+        if (newPage !== 0) {
+            setLoading(true);
+            setPage(newPage);
+            fetchFilteredRepositories({ username: userInput, repoFilter: filterText ?? "", page: newPage, pageLimit })
+                .then(async data => {
+                    const response = await data.json();
+                    setRepoList(response.items);
+                })
+                .catch(() => setRepoList([]))
+                .finally(() => setLoading(false));
+        }
+    }
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (filterText !== undefined) {
+                if (filterText === "") {
+                    getFirstPage();
+                } else {
+                    handleFilterList(1);
+                }
+            }
+        }, 300);
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    }, [filterText])
+
+    useEffect(() => {
+        if (repoList.length > 0) {
+            flatListRef.current.scrollToOffset({ animated: false, offset: 10 });
+        }
+    }, [repoList])
+
+    function handleOnEndReached() {
+        if (repoList.length === pageLimit) {
+            if (filterText) {
+                handleFilterList(page + 1);
+            } else {
+                getNextPage();
+            }
+        }
+    }
+
+    function handleOnTopReached() {
+        if (repoList.length === pageLimit) {
+            if (filterText) {
+                handleFilterList(page - 1);
+            } else {
+                getPreviousPage();
+            }
         }
     }
 
     return (
         <View style={{ height: "100%", paddingBottom: 30 }}>
+            <Searchbar
+                value={filterText ?? ""}
+                placeholder="Nome repository"
+                onChangeText={setFilterText}
+                style={{ borderRadius: 0 }}
+            />
             {
-                repoList.length === 0 ?
-                    <Text variant="displayLarge">
+                !loading && repoList.length === 0 ?
+                    <Text variant="titleMedium">
                         Nessuna repository trovata <Icon source="emoticon-sad-outline" size={50} />
                     </Text>
                     :
-                    <View>
-                        <Searchbar
-                            value={filterText}
-                            placeholder="Nome repository"
-                            onChangeText={handleFilterList}
-                            style={{ borderRadius: 0 }}
-                        />
+                    <View style={{ paddingBottom: 150 }}>
                         <FlatList
-                            data={filteredRepoList}
+                            ref={flatListRef}
+                            data={repoList}
                             renderItem={({ item }) => <ItemCard repo={item} />}
                             keyExtractor={item => item.id}
+                            onEndReached={() => handleOnEndReached()}
+                            onStartReached={() => handleOnTopReached()}
+                            refreshing={loading}
                         />
                     </View>
             }
