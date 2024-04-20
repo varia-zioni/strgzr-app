@@ -408,3 +408,9 @@ node_modules
 /build
 /captures
 .externalNativeBuild
+
+*/tmp/*
+android/app/build/*
+
+yarn.lock
+package-lock.json
