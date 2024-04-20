@@ -411,6 +411,3 @@ node_modules
 
 */tmp/*
 android/app/build/*
-
-yarn.lock
-package-lock.json
