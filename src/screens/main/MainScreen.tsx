@@ -8,31 +8,33 @@ export default function MainView() {
     const [repoList, setRepoList] = useState<Array<Repository>>([]);
     const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
-    const [userInput, setUserInput] = useState<string>("");
+    const [usernameInput, setUsernameInput] = useState<string>("");
     const [page, setPage] = useState<number>(1);
 
     function getRepoList(newPage: number) {
-        setLoading(true);
-        setPage(newPage);
-        fetchUserRepositories({ username: userInput, pageLimit: 30, page: newPage ?? 1 })
-            .then(async data => {
-                const response = await data.json();
-                setRepoList(response);
-            })
-            .catch(() => setRepoList([]))
-            .finally(() => {
-                setLoading(false);
-                if (isFirstRender) {
-                    setIsFirstRender(false);
-                }
-            });
+        if(usernameInput.trim()){
+            setLoading(true);
+            setPage(newPage);
+            fetchUserRepositories({ username: usernameInput, pageLimit: 30, page: newPage ?? 1 })
+                .then(async data => {
+                    const response = await data.json();
+                    setRepoList(response);
+                })
+                .catch(() => setRepoList([]))
+                .finally(() => {
+                    setLoading(false);
+                    if (isFirstRender) {
+                        setIsFirstRender(false);
+                    }
+                });
+        }
     }
 
     return (
         <>
             <UserSearch
-                userInput={userInput}
-                setUserInput={setUserInput}
+                usernameInput={usernameInput}
+                setUsernameInput={setUsernameInput}
                 searchTrigger={() => getRepoList(1)}
                 isFirstRender={isFirstRender}
                 loading={loading}
@@ -46,7 +48,7 @@ export default function MainView() {
                     getNextPage={() => getRepoList(page + 1)}
                     getPreviousPage={() => page > 1 && getRepoList(page - 1)}
                     loading={loading}
-                    userInput={userInput}
+                    userInput={usernameInput}
                 />
             }
         </>
