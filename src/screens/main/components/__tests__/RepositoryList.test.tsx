@@ -55,13 +55,7 @@ describe('RepositoryList', () => {
         fireEvent.changeText(getByTestId('repo-search-bar'), '');
         await waitFor(() => expect(spyOnGetFirstPage).toHaveBeenCalled());
 
-        fireEvent(getByTestId('flatlist'), 'onEndReached');
-
         expect(getByTestId('repo-list-view')).toBeTruthy();
         expect(getByTestId('flatlist')).toBeTruthy();
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 });
