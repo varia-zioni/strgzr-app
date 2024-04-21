@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Image, View } from "react-native";
 import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
 
 type Props = {
@@ -9,7 +9,8 @@ type Props = {
     loading: boolean;
 }
 
-export default function UserSearch({userInput, setUserInput, searchTrigger, isFirstRender, loading }: Props) {
+const baseImagePath = "../../../assets/";
+export default function UserSearch({ userInput, setUserInput, searchTrigger, isFirstRender, loading }: Props) {
 
     return (
         <Surface
@@ -22,6 +23,13 @@ export default function UserSearch({userInput, setUserInput, searchTrigger, isFi
                 justifyContent: "center",
             }}
         >
+            <View style={{ alignItems: "center" }}>
+                {isFirstRender ?
+                    <Image source={require(baseImagePath + "appTitle.png")} style={{ marginBottom: 50 }} />
+                    :
+                    <Image source={require(baseImagePath + "appTitleSmall.png")} style={{ marginBottom: 20 }} />
+                }
+            </View>
             <Searchbar
                 icon="github"
                 placeholder="Username GitHub"
