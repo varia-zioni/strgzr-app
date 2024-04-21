@@ -1,4 +1,4 @@
-import { ActivityIndicator, Card, Chip, Divider, Icon, Searchbar, Text } from "react-native-paper";
+import { ActivityIndicator, Card, Chip, Icon, Searchbar, Text } from "react-native-paper";
 import { Repository } from "../../../models/RepositoryModel";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, TouchableHighlight, View } from "react-native";
@@ -53,10 +53,18 @@ type Props = {
 };
 
 const pageLimit = 30;
-export default function RepositoryList(
-    { repoList, setRepoList, getFirstPage, getNextPage, getPreviousPage, loading, userInput }: Props) {
+export default function RepositoryList({
+    repoList,
+    setRepoList,
+    getFirstPage,
+    getNextPage,
+    getPreviousPage,
+    loading,
+    userInput
+}: Props) {
+
     const [filterText, setFilterText] = useState<string | undefined>(undefined);
-    const flatListRef = useRef()!;
+    const flatListRef = useRef<FlatList>(null);
     const [page, setPage] = useState<number>(1);
     const [filterLoading, setFilterLoading] = useState<boolean>(false);
 
@@ -90,7 +98,7 @@ export default function RepositoryList(
     }, [filterText])
 
     useEffect(() => {
-        if (repoList.length > 0) {
+        if (repoList.length > 0 && flatListRef.current) {
             flatListRef.current.scrollToOffset({ animated: false, offset: 10 });
         }
     }, [repoList])
