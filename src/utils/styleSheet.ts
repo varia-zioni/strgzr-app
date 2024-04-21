@@ -1,7 +1,7 @@
 export const styles = {
     colors :{
         lightPurple: "#eddcf5",
-        strongPurple: "#a465ae",
+        strongPurple: "#663399",
         dark: "#292629",
         black: "#000000"
     }

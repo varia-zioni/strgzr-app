@@ -1,7 +1,6 @@
 import { Image, View } from "react-native";
 import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
 import styles from "../../../utils/styleSheet";
-import { useState } from "react";
 
 type Props = {
     usernameInput: string;
