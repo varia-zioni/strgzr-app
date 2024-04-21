@@ -19,7 +19,7 @@ const ItemCard = (({ repo }: { repo: Repository }) => {
                     <Card.Title
                         title={repo.name}
                         right={() =>
-                            <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ width: 65 }}>
+                            <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }}>
                                 {repo.stargazers_count}
                             </Chip>
                         }
