@@ -14,16 +14,18 @@ export default function MainView() {
     function getRepoList(newPage: number) {
         setLoading(true);
         setPage(newPage);
-        if (isFirstRender) {
-            setIsFirstRender(false);
-        }
         fetchUserRepositories({ username: userInput, pageLimit: 30, page: newPage ?? 1 })
             .then(async data => {
                 const response = await data.json();
                 setRepoList(response);
             })
             .catch(() => setRepoList([]))
-            .finally(() => setLoading(false));
+            .finally(() => {
+                setLoading(false);
+                if (isFirstRender) {
+                    setIsFirstRender(false);
+                }
+            });
     }
 
     return (

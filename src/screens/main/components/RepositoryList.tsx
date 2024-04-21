@@ -1,7 +1,7 @@
-import { ActivityIndicator, Card, Chip, Icon, Searchbar, Text } from "react-native-paper";
+import { Card, Chip, Divider, Icon, Searchbar, Text } from "react-native-paper";
 import { Repository } from "../../../models/RepositoryModel";
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, TouchableHighlight, View } from "react-native";
+import { FlatList, RefreshControl, TouchableHighlight, View } from "react-native";
 import StargazersModal from "./StargazersModal";
 import { fetchFilteredRepositories } from "../../../services/githubService";
 
@@ -9,6 +9,7 @@ const ItemCard = (({ repo }: { repo: Repository }) => {
     const [openModal, setOpenModal] = useState<boolean>(false);
     return (
         <>
+            <Divider bold />
             <TouchableHighlight
                 onLongPress={() => setOpenModal(true)}
                 delayLongPress={200}
@@ -124,7 +125,7 @@ export default function RepositoryList({
     }
 
     return (
-        <View style={{ height: "100%", paddingBottom: 30 }}>
+        <View style={{ flex: 1 }}>
             <Searchbar
                 value={filterText ?? ""}
                 placeholder="Nome repository"
@@ -132,19 +133,18 @@ export default function RepositoryList({
                 style={{ borderRadius: 0 }}
                 loading={filterLoading}
             />
-
-            <View style={{ paddingBottom: 150 }}>
-                <FlatList
-                    ref={flatListRef}
-                    data={repoList}
-                    renderItem={({ item }) => <ItemCard repo={item} />}
-                    keyExtractor={item => item.id}
-                    onEndReached={() => handleOnEndReached()}
-                    onStartReached={() => handleOnTopReached()}
-                    refreshing={loading || filterLoading}
-                    ListEmptyComponent={renderEmptyState}
-
-                />
-            </View>
+            <FlatList
+                ref={flatListRef}
+                data={repoList}
+                renderItem={({ item }) => <ItemCard repo={item} />}
+                keyExtractor={item => item.id}
+                onEndReached={() => handleOnEndReached()}
+                refreshing={loading || filterLoading}
+                ListEmptyComponent={renderEmptyState}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl refreshing={loading} onRefresh={() => handleOnTopReached()} colors={["#a465ae"]} />
+                }
+            />
         </View>)
 }
