@@ -1,17 +1,18 @@
 import { Image, View } from "react-native";
 import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
 import styles from "../../../utils/styleSheet";
+import { useState } from "react";
 
 type Props = {
-    userInput: string;
-    setUserInput: (username: string) => void;
+    usernameInput: string;
+    setUsernameInput: (username: string) => void;
     searchTrigger: () => void;
     isFirstRender: boolean;
     loading: boolean;
 }
 
 const baseImagePath = "../../../assets/";
-export default function UserSearch({ userInput, setUserInput, searchTrigger, isFirstRender, loading }: Props) {
+export default function UserSearch({ usernameInput, setUsernameInput, searchTrigger, isFirstRender, loading }: Props) {
 
     return (
         <Surface
@@ -34,8 +35,8 @@ export default function UserSearch({ userInput, setUserInput, searchTrigger, isF
             <Searchbar
                 icon="github"
                 placeholder="Username GitHub"
-                onChangeText={setUserInput}
-                value={userInput}
+                onChangeText={setUsernameInput}
+                value={usernameInput}
                 style={{ marginBottom: 20 }}
             />
             <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }}>
