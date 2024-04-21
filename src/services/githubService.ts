@@ -24,9 +24,9 @@ export function fetchFilteredRepositories({ username, repoFilter, page, pageLimi
         });
 }
 
-export function fetchRepositoryStargazers({ username, repoName }: { username: string; repoName: string; }) {
+export function fetchRepositoryStargazers({ username, repoName, pageNum }: { username: string; repoName: string; pageNum: number;}) {
     return  fetch(
-        `https://api.github.com/repos/${username}/${repoName}/stargazers?per_page=100`,
+        `https://api.github.com/repos/${username}/${repoName}/stargazers?per_page=100&page=${pageNum}`,
         {
             method: 'GET',
             headers: { 
