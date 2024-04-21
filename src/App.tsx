@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import MainScreen from './screens/main/MainScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import styles from './utils/styleSheet';
 
 function App(): React.JSX.Element {

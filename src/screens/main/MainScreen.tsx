@@ -3,6 +3,7 @@ import RepositoryList from './components/RepositoryList';
 import UserSearch from './components/UserSearch';
 import React, { useState } from 'react';
 import { fetchUserRepositories } from '../../services/githubService';
+import { BackHandler } from 'react-native';
 
 export default function MainView() {
     const [repoList, setRepoList] = useState<Array<Repository>>([]);
@@ -29,6 +30,11 @@ export default function MainView() {
                 });
         }
     }
+
+    BackHandler.addEventListener('hardwareBackPress', function () {
+        setIsFirstRender(true); 
+        return true;
+    });
 
     return (
         <>
