@@ -3,7 +3,6 @@ import RepositoryList from './components/RepositoryList';
 import UserSearch from './components/UserSearch';
 import React, { useState } from 'react';
 import { fetchUserRepositories } from '../../services/githubService';
-import Config from 'react-native-config';
 
 export default function MainView() {
     const [repoList, setRepoList] = useState<Array<Repository>>([]);
@@ -32,7 +31,7 @@ export default function MainView() {
             <UserSearch
                 userInput={userInput}
                 setUserInput={setUserInput}
-                searchTrigger={() => getRepoList(0)}
+                searchTrigger={() => getRepoList(1)}
                 isFirstRender={isFirstRender}
                 loading={loading}
             />
@@ -46,7 +45,6 @@ export default function MainView() {
                     getPreviousPage={() => page > 1 && getRepoList(page - 1)}
                     loading={loading}
                     userInput={userInput}
-                    setLoading={setLoading}
                 />
             }
         </>
