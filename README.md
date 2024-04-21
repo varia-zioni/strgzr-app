@@ -9,6 +9,7 @@ React Native-based mobile application that uses GitHub's APIs to retrieve an use
     * [Prerequisites](#prerequisites)
         + [Node JS](#nodejs)
         + [React Native](#react-native)
+        + [GitHub Token](#github-token)
     * [Build the app](#build-the-app)
     * [Run the app](#run-the-app)
         + [Android Emulator](#android-emulator)
@@ -33,6 +34,10 @@ Download it from the official site [nodejs](https://nodejs.org/en/download) or u
 Follow the [official tutorial](https://reactnative.dev/docs/environment-setup?guide=native) for installing the `React Native CLI` for your operating system.
 
 If you have a macOS system, you can follow both the tutorial for iOS and for Android. If you have a Linux or Windows system, you need only to install the development environment for Android.
+
+### GitHub Token
+GitHub has a rate limit to its APIs for unauthenticated users, so if you want to test intensively this app you will need to set the `GIT_HUB_TOKEN` env variabile in the `.env` file.
+To generate the token you can follow the [official guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token).
 
 ## Build the app
 In order to build the app, we use [npm](https://www.npmjs.com/) for managing javascript dependencies, and as stated [previously](#nodeJS)
