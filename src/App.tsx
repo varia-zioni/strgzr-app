@@ -7,35 +7,25 @@
 
 import React from 'react';
 import {
+  Appearance,
   StatusBar,
-  useColorScheme,
 } from 'react-native';
-
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
 import MainScreen from './screens/main/MainScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import styles from './utils/styleSheet';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  Appearance.setColorScheme("dark");
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-        <SafeAreaProvider>
-          <StatusBar
-            animated={true}
-            backgroundColor={styles.colors.lightPurple}
-          />
-          <MainScreen />
-        </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <StatusBar
+        animated={true}
+        backgroundColor={styles.colors.lightPurple}
+      />
+      <MainScreen />
+    </SafeAreaProvider>
   );
 }
 
