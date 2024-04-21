@@ -4,4 +4,9 @@ module.exports = {
     "node_modules/(?!(jest-)?@react-native|react-native)"
   ],
   collectCoverage: true,
+  "coverageThreshold": {
+    "global": {
+      "lines": 75
+    }
+  }
 };
