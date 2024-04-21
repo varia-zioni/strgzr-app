@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FlatList, RefreshControl, TouchableHighlight, View } from "react-native";
 import StargazersModal from "./StargazersModal";
 import { fetchFilteredRepositories } from "../../../services/githubService";
+import styles from "../../../utils/styleSheet";
 
 const ItemCard = (({ repo }: { repo: Repository }) => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -14,7 +15,7 @@ const ItemCard = (({ repo }: { repo: Repository }) => {
                 onLongPress={() => setOpenModal(true)}
                 delayLongPress={200}
             >
-                <Card style={{ borderRadius: 0, paddingRight: 10 }}>
+                <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }}>
                     <Card.Title
                         title={repo.name}
                         right={() =>
@@ -125,7 +126,7 @@ export default function RepositoryList({
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: styles.colors.dark }}>
             <Searchbar
                 value={filterText ?? ""}
                 placeholder="Nome repository"
@@ -143,7 +144,7 @@ export default function RepositoryList({
                 ListEmptyComponent={renderEmptyState}
                 showsVerticalScrollIndicator={false}
                 refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={() => handleOnTopReached()} colors={["#a465ae"]} />
+                    <RefreshControl refreshing={loading} onRefresh={() => handleOnTopReached()} colors={[styles.colors.strongPurple]} />
                 }
             />
         </View>)

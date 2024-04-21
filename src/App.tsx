@@ -17,6 +17,7 @@ import {
 import MainScreen from './screens/main/MainScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import styles from './utils/styleSheet';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -30,7 +31,7 @@ function App(): React.JSX.Element {
         <SafeAreaProvider>
           <StatusBar
             animated={true}
-            backgroundColor="#eddcf5"
+            backgroundColor={styles.colors.lightPurple}
           />
           <MainScreen />
         </SafeAreaProvider>

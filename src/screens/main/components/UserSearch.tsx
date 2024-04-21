@@ -1,5 +1,6 @@
 import { Image, View } from "react-native";
 import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
+import styles from "../../../utils/styleSheet";
 
 type Props = {
     userInput: string;
@@ -18,7 +19,7 @@ export default function UserSearch({ userInput, setUserInput, searchTrigger, isF
             style={{
                 paddingHorizontal: 20,
                 paddingVertical: 30,
-                backgroundColor: "#eddcf5",
+                backgroundColor: styles.colors.lightPurple,
                 height: isFirstRender ? "100%" : "auto",
                 justifyContent: "center",
             }}
@@ -38,7 +39,7 @@ export default function UserSearch({ userInput, setUserInput, searchTrigger, isF
                 style={{ marginBottom: 20 }}
             />
             <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }}>
-                {loading ? <ActivityIndicator color="#000000" /> : "Recupera lista repository"}
+                {loading ? <ActivityIndicator color={styles.colors.black} /> : "Recupera lista repository"}
             </Button>
         </Surface>
     );
