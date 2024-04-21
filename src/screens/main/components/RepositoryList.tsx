@@ -138,7 +138,7 @@ export default function RepositoryList({
                 ref={flatListRef}
                 data={repoList}
                 renderItem={({ item }) => <ItemCard repo={item} />}
-                keyExtractor={item => item.id}
+                keyExtractor={item => (item.id+item.name)}
                 onEndReached={() => handleOnEndReached()}
                 refreshing={loading || filterLoading}
                 ListEmptyComponent={renderEmptyState}

@@ -40,15 +40,18 @@ type Props = {
     repo: Repository;
 }
 
+const pageLimit = 100;
 export default function StargazersModal({ openModal, setOpenModal, repo }: Props) {
     const [stargazersList, setStargazersList] = useState<Array<Stargazer> | undefined>(undefined);
     const [page, setPage] = useState<number>(1);
     const [nextPageLoading, setNextPageLoading] = useState<boolean>(false);
 
     function getStargazers(newPage: number) {
-        setNextPageLoading(true);
+        if (newPage > 1) {
+            setNextPageLoading(true);
+        }
         setPage(newPage);
-        fetchRepositoryStargazers({ username: repo.owner.login, repoName: repo.name, pageNum: newPage })
+        fetchRepositoryStargazers({ username: repo.owner.login, repoName: repo.name, pageNum: newPage, pageLimit })
             .then(async (data) => {
                 const response = await data.json();
                 setStargazersList((prev) => prev ? prev.concat(response) : response);
@@ -85,8 +88,8 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
                                     style={{ maxHeight: 600 }}
                                     data={stargazersList}
                                     renderItem={({ item, index }) => <ItemCard user={item} index={index} />}
-                                    keyExtractor={item => item.login}
-                                    onEndReached={() => getStargazers(page + 1)}
+                                    keyExtractor={(item, index) => (item.id + item.login + index)}
+                                    onEndReached={() => stargazersList.length >= pageLimit && getStargazers(page + 1)}
                                     onEndReachedThreshold={20}
                                     ListEmptyComponent={() => (
                                         <View style={{ alignItems: "center" }}>
@@ -94,9 +97,9 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
                                             <Text variant="bodyLarge" style={{ color: styles.colors.black, marginRight: 10 }}>
                                                 Non sono presenti stargazers
                                             </Text>
-
                                         </View>
                                     )}
+                                    refreshing={nextPageLoading}
                                     refreshControl={
                                         <RefreshControl refreshing={nextPageLoading} colors={[styles.colors.strongPurple]} />
                                     }
