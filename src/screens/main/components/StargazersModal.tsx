@@ -68,6 +68,7 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
             onRequestClose={() => setOpenModal(false)}
             transparent
             presentationStyle="overFullScreen"
+            testID="stargazers-modal"
         >
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <Card style={{ marginHorizontal: 20, backgroundColor: styles.colors.lightPurple, maxHeight: 700, width: 350 }}>
@@ -76,7 +77,7 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
                             <Icon source="github" size={25} color={styles.colors.black} />
                             <Text variant="titleMedium" style={{ color: styles.colors.black, marginLeft: 15, marginRight: 15 }} >{repo.name}</Text>
                         </View>
-                        <IconButton style={{ flex: 0.1 }} icon="close" iconColor={styles.colors.black} size={25} onPress={() => setOpenModal(false)} />
+                        <IconButton testID="close-button" style={{ flex: 0.1 }} icon="close" iconColor={styles.colors.black} size={25} onPress={() => setOpenModal(false)} />
                     </View>
                     <Divider bold />
                     <View style={{ flexDirection: "row", justifyContent: "center", padding: 15 }}>
@@ -85,6 +86,7 @@ export default function StargazersModal({ openModal, setOpenModal, repo }: Props
                                 <ActivityIndicator size="large" />
                                 :
                                 <FlatList
+                                    testID="flatlist"
                                     style={{ maxHeight: 600 }}
                                     data={stargazersList}
                                     renderItem={({ item, index }) => <ItemCard user={item} index={index} />}

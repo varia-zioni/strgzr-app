@@ -126,19 +126,21 @@ export default function RepositoryList({
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: styles.colors.dark }}>
+        <View style={{ flex: 1, backgroundColor: styles.colors.dark }} testID="repo-list-view">
             <Searchbar
                 value={filterText ?? ""}
                 placeholder="Nome repository"
                 onChangeText={setFilterText}
                 style={{ borderRadius: 0 }}
                 loading={filterLoading}
+                testID="repo-search-bar"
             />
             <FlatList
+                testID="flatlist"
                 ref={flatListRef}
                 data={repoList}
                 renderItem={({ item }) => <ItemCard repo={item} />}
-                keyExtractor={item => (item.id+item.name)}
+                keyExtractor={item => (item.id + item.name)}
                 onEndReached={() => handleOnEndReached()}
                 refreshing={loading || filterLoading}
                 ListEmptyComponent={renderEmptyState}

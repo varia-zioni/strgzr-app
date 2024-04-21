@@ -23,12 +23,13 @@ export default function UserSearch({ usernameInput, setUsernameInput, searchTrig
                 height: isFirstRender ? "100%" : "auto",
                 justifyContent: "center",
             }}
+            testID="user-search-view"
         >
             <View style={{ alignItems: "center" }}>
                 {isFirstRender ?
-                    <Image source={require(baseImagePath + "appTitle.png")} style={{ marginBottom: 50 }} />
+                    <Image testID="appTitle" source={require(baseImagePath + "appTitle.png")} style={{ marginBottom: 50 }} />
                     :
-                    <Image source={require(baseImagePath + "appTitleSmall.png")} style={{ marginBottom: 20 }} />
+                    <Image testID="appTitleSmall" source={require(baseImagePath + "appTitleSmall.png")} style={{ marginBottom: 20 }} />
                 }
             </View>
             <Searchbar
@@ -37,8 +38,9 @@ export default function UserSearch({ usernameInput, setUsernameInput, searchTrig
                 onChangeText={setUsernameInput}
                 value={usernameInput}
                 style={{ marginBottom: 20 }}
+                testID="search-bar"
             />
-            <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }}>
+            <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }} testID="search-button">
                 {loading ? <ActivityIndicator color={styles.colors.black} /> : "Recupera lista repository"}
             </Button>
         </Surface>
