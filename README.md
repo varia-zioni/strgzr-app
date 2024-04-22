@@ -1,6 +1,6 @@
 ![strgzr](./src/assets/appTitle.png)
 
-React Native-based mobile application that uses GitHub's APIs to retrieve an user's list of repositories and relatives "Stargazers" (users that starred a repository) 
+React Native-based mobile application that uses GitHub's APIs to retrieve an user's list of repositories and their "Stargazers" (users who have starred the repository) 
 
 ---
 ## Summary 📖
