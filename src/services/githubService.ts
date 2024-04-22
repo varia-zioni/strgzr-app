@@ -7,7 +7,7 @@ export function fetchUserRepositories({ username, pageLimit, page }: { username:
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Config.GIT_HUB_TOKEN}`
+                ...(Config.GIT_HUB_TOKEN && {'Authorization': `Bearer ${Config.GIT_HUB_TOKEN}`})
             }
         });
 }
@@ -19,7 +19,7 @@ export function fetchFilteredRepositories({ username, repoFilter, page, pageLimi
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Config.GIT_HUB_TOKEN}`
+                ...(Config.GIT_HUB_TOKEN && {'Authorization': `Bearer ${Config.GIT_HUB_TOKEN}`})
             }
         });
 }
@@ -31,7 +31,7 @@ export function fetchRepositoryStargazers({ username, repoName, pageNum, pageLim
             method: 'GET',
             headers: { 
                 'Content-Type': 'application/json',
-                'Authorization':  `Bearer ${Config.GIT_HUB_TOKEN}`
+                ...(Config.GIT_HUB_TOKEN && {'Authorization': `Bearer ${Config.GIT_HUB_TOKEN}`})
              }
 
         });
