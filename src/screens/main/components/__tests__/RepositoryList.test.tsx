@@ -36,17 +36,17 @@ describe('RepositoryList', () => {
     it('renders RepositoryList correctly', async () => {
         const spyOnSetRepoList = jest.fn();
         const spyOnGetFirstPage = jest.fn();
-        const { getByTestId } = render(
+        const { getByTestId, queryByTestId } = render(
             <RepositoryList
                 repoList={hundredRepoes().items}
                 setRepoList={spyOnSetRepoList}
                 getFirstPage={spyOnGetFirstPage}
                 getNextPage={() => { }}
-                getPreviousPage={() => { }}
                 loading={false}
                 userInput="testuser"
             />
         );
+        expect(queryByTestId("empty-state")).toBeNull();
 
         fireEvent.changeText(getByTestId('repo-search-bar'), 'testFilter');
         await waitFor(() => expect(spyOnFetchFilteredRepo).toHaveBeenCalled());
@@ -57,5 +57,23 @@ describe('RepositoryList', () => {
 
         expect(getByTestId('repo-list-view')).toBeTruthy();
         expect(getByTestId('flatlist')).toBeTruthy();
+    });
+
+    it('renders RepositoryList empty state correctly', async () => {
+        const spyOnSetRepoList = jest.fn();
+        const spyOnGetFirstPage = jest.fn();
+        const { getByTestId, queryByTestId } = render(
+            <RepositoryList
+                repoList={[]}
+                setRepoList={spyOnSetRepoList}
+                getFirstPage={spyOnGetFirstPage}
+                getNextPage={() => { }}
+                loading={false}
+                userInput="testuser"
+            />
+        );
+
+        expect(queryByTestId("empty-state")).not.toBeNull();
+        expect(getByTestId('repo-list-view')).toBeTruthy();
     });
 });

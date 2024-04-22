@@ -30,7 +30,9 @@ const renderEmptyState = () => (
     <View style={{
         padding: 50,
         alignItems: 'center'
-    }}>
+    }}
+    testID="empty-state"
+    >
         <Icon source="emoticon-sad-outline" size={50} />
         <Text variant="titleMedium" style={{ marginTop: 20 }}>
             Nessuna repository trovata
@@ -46,7 +48,7 @@ type Props = {
     getNextPage: () => void;
     loading: boolean;
     userInput: string;
-    flatListRef: React.RefObject<FlatList<any>>;
+    flatListRef?: React.RefObject<FlatList<any>>;
 };
 
 const pageLimit = 30;
