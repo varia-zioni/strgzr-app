@@ -1,7 +1,7 @@
 import { Card, Chip, Divider, Icon, Searchbar, Text } from "react-native-paper";
 import { Repository } from "../../../models/RepositoryModel";
-import React, { useEffect, useRef, useState } from "react";
-import { FlatList, RefreshControl, TouchableHighlight, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, View } from "react-native";
 import StargazersModal from "./StargazersModal";
 import { fetchFilteredRepositories } from "../../../services/githubService";
 import styles from "../../../utils/styleSheet";
@@ -11,21 +11,16 @@ const ItemCard = (({ repo }: { repo: Repository }) => {
     return (
         <>
             <Divider bold />
-            <TouchableHighlight
-                onLongPress={() => setOpenModal(true)}
-                delayLongPress={200}
-            >
-                <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }}>
-                    <Card.Title
-                        title={repo.name}
-                        right={() =>
-                            <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }}>
-                                {repo.stargazers_count}
-                            </Chip>
-                        }
-                    />
-                </Card>
-            </TouchableHighlight>
+            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }}>
+                <Card.Title
+                    title={repo.name}
+                    right={() =>
+                        <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }}>
+                            {repo.stargazers_count}
+                        </Chip>
+                    }
+                />
+            </Card>
             {openModal && <StargazersModal openModal={openModal} setOpenModal={setOpenModal} repo={repo} />}
         </>
     );
@@ -46,12 +41,12 @@ const renderEmptyState = () => (
 
 type Props = {
     repoList: Array<Repository>;
-    setRepoList: (array: Array<Repository>) => void;
+    setRepoList: (arg: any) => void;
     getFirstPage: () => void;
     getNextPage: () => void;
-    getPreviousPage: () => void;
     loading: boolean;
     userInput: string;
+    flatListRef: React.RefObject<FlatList<any>>;
 };
 
 const pageLimit = 30;
@@ -60,28 +55,33 @@ export default function RepositoryList({
     setRepoList,
     getFirstPage,
     getNextPage,
-    getPreviousPage,
     loading,
-    userInput
+    userInput,
+    flatListRef
 }: Props) {
 
     const [filterText, setFilterText] = useState<string | undefined>(undefined);
-    const flatListRef = useRef<FlatList>(null);
+
     const [page, setPage] = useState<number>(1);
     const [filterLoading, setFilterLoading] = useState<boolean>(false);
 
     function handleFilterList(newPage: number) {
-        if (newPage !== 0) {
-            setFilterLoading(true);
-            setPage(newPage);
-            fetchFilteredRepositories({ username: userInput, repoFilter: filterText ?? "", page: newPage, pageLimit })
-                .then(async data => {
-                    const response = await data.json();
-                    setRepoList(response.items);
-                })
-                .catch(() => setRepoList([]))
-                .finally(() => setFilterLoading(false));
-        }
+        setFilterLoading(true);
+        setPage(newPage);
+        let elementsFound = false;
+        fetchFilteredRepositories({ username: userInput, repoFilter: filterText ?? "", page: newPage, pageLimit })
+            .then(async data => {
+                const response = await data.json();
+                setRepoList((prev: Array<Repository>) => (newPage === 1 ? response.items : prev.concat(response.items)));
+                elementsFound = response.items.length > 0
+            })
+            .catch(() => setRepoList([]))
+            .finally(() => {
+                setFilterLoading(false);
+                if (flatListRef?.current && newPage === 1 && elementsFound) {
+                    flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+                }
+            });
     }
 
     useEffect(() => {
@@ -99,28 +99,13 @@ export default function RepositoryList({
         }
     }, [filterText])
 
-    useEffect(() => {
-        if (repoList.length > 0 && flatListRef.current) {
-            flatListRef.current.scrollToOffset({ animated: false, offset: 10 });
-        }
-    }, [repoList])
 
     function handleOnEndReached() {
-        if (repoList.length === pageLimit) {
+        if (repoList.length >= pageLimit) {
             if (filterText) {
                 handleFilterList(page + 1);
             } else {
                 getNextPage();
-            }
-        }
-    }
-
-    function handleOnTopReached() {
-        if (repoList.length === pageLimit) {
-            if (filterText) {
-                handleFilterList(page - 1);
-            } else {
-                getPreviousPage();
             }
         }
     }
@@ -145,9 +130,6 @@ export default function RepositoryList({
                 refreshing={loading || filterLoading}
                 ListEmptyComponent={renderEmptyState}
                 showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={() => handleOnTopReached()} colors={[styles.colors.strongPurple]} />
-                }
             />
         </View>)
 }
