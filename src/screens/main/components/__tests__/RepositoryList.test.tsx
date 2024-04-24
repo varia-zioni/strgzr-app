@@ -76,4 +76,35 @@ describe('RepositoryList', () => {
         expect(queryByTestId("empty-state")).not.toBeNull();
         expect(getByTestId('repo-list-view')).toBeTruthy();
     });
+
+    it('renders RepositoryList and test open stargazers modal', async () => {
+        const spyOnSetRepoList = jest.fn();
+        const spyOnGetFirstPage = jest.fn();
+        const { getByTestId, queryByTestId } = render(
+            <RepositoryList
+                repoList={[{
+                    id: 1,
+                    name: "repo1",
+                    description: '',
+                    stargazers_url: '',
+                    stargazers_count: '',
+                    full_name: '',
+                    owner: {
+                        login: ''
+                    }
+                }]}
+                setRepoList={spyOnSetRepoList}
+                getFirstPage={spyOnGetFirstPage}
+                getNextPage={() => { }}
+                loading={false}
+                userInput="testuser"
+            />
+        );
+        expect(queryByTestId("empty-state")).toBeNull();
+        fireEvent.press(getByTestId("stargazers-chip"));
+
+        await waitFor(() => {
+            expect(getByTestId("stargazers-modal")).toBeTruthy();
+        })
+    });
 });

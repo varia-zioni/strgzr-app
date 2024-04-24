@@ -12,7 +12,7 @@ const ItemCard = ({ user, index }: { user: Stargazer, index: number }) => (
         <TouchableHighlight
             onPress={() => Linking.openURL(user.html_url)}
         >
-            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.lightPurple }}>
+            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.lightPurple }} testID="stargazer-item">
                 <Card.Title
                     titleStyle={{ color: styles.colors.black }}
                     title={user.login}

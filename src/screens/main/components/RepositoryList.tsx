@@ -11,11 +11,11 @@ const ItemCard = (({ repo }: { repo: Repository }) => {
     return (
         <>
             <Divider bold />
-            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }}>
+            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }} testID="repo-item">
                 <Card.Title
                     title={repo.name}
                     right={() =>
-                        <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }}>
+                        <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }} testID="stargazers-chip">
                             {repo.stargazers_count}
                         </Chip>
                     }
