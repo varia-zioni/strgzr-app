@@ -5,17 +5,18 @@ import { FlatList, View } from "react-native";
 import StargazersModal from "./StargazersModal";
 import { fetchFilteredRepositories } from "../../../services/githubService";
 import styles from "../../../utils/styleSheet";
+import { testProps } from "../../../utils/testUtils";
 
 const ItemCard = (({ repo }: { repo: Repository }) => {
     const [openModal, setOpenModal] = useState<boolean>(false);
     return (
         <>
             <Divider bold />
-            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }} testID="repo-item">
+            <Card style={{ borderRadius: 0, paddingRight: 10, backgroundColor: styles.colors.dark }} {...testProps("repo-item")}>
                 <Card.Title
                     title={repo.name}
                     right={() =>
-                        <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }} testID="stargazers-chip">
+                        <Chip icon="star-circle-outline" onPress={() => setOpenModal(true)} style={{ minWidth: 50 }} {...testProps("stargazers-chip")}>
                             {repo.stargazers_count}
                         </Chip>
                     }
@@ -31,7 +32,7 @@ const renderEmptyState = () => (
         padding: 50,
         alignItems: 'center'
     }}
-    testID="empty-state"
+    {...testProps("empty-state")}
     >
         <Icon source="emoticon-sad-outline" size={50} />
         <Text variant="titleMedium" style={{ marginTop: 20 }}>
@@ -113,17 +114,17 @@ export default function RepositoryList({
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: styles.colors.dark }} testID="repo-list-view">
+        <View style={{ flex: 1, backgroundColor: styles.colors.dark }} {...testProps("repo-list-view")}>
             <Searchbar
                 value={filterText ?? ""}
                 placeholder="Nome repository"
                 onChangeText={setFilterText}
                 style={{ borderRadius: 0 }}
                 loading={filterLoading}
-                testID="repo-search-bar"
+                {...testProps("repo-search-bar")}
             />
             <FlatList
-                testID="flatlist"
+                {...testProps("flatlist")}
                 ref={flatListRef}
                 data={repoList}
                 renderItem={({ item }) => <ItemCard repo={item} />}

@@ -1,6 +1,7 @@
 import { Image, View } from "react-native";
 import { ActivityIndicator, Button, Searchbar, Surface } from "react-native-paper";
 import styles from "../../../utils/styleSheet";
+import { testProps } from "../../../utils/testUtils";
 
 type Props = {
     usernameInput: string;
@@ -23,13 +24,13 @@ export default function UserSearch({ usernameInput, setUsernameInput, searchTrig
                 height: isFirstRender ? "100%" : "auto",
                 justifyContent: "center",
             }}
-            testID="user-search-view"
+            {...testProps("user-search-view")}
         >
             <View style={{ alignItems: "center" }}>
                 {isFirstRender ?
-                    <Image testID="appTitle" source={require(baseImagePath + "appTitle.png")} style={{ marginBottom: 50 }} />
+                    <Image {...testProps("appTitle")} source={require(baseImagePath + "appTitle.png")} style={{ marginBottom: 50 }} />
                     :
-                    <Image testID="appTitleSmall" source={require(baseImagePath + "appTitleSmall.png")} style={{ marginBottom: 20 }} />
+                    <Image {...testProps("appTitleSmall")} source={require(baseImagePath + "appTitleSmall.png")} style={{ marginBottom: 20 }} />
                 }
             </View>
             <Searchbar
@@ -38,9 +39,9 @@ export default function UserSearch({ usernameInput, setUsernameInput, searchTrig
                 onChangeText={setUsernameInput}
                 value={usernameInput}
                 style={{ marginBottom: 20 }}
-                testID="search-bar"
+                {...testProps("search-bar")}
             />
-            <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }} testID="search-button">
+            <Button mode="contained" onPress={() => searchTrigger()} style={{ height: 50, justifyContent: "center" }} {...testProps("search-button")}>
                 {loading ? <ActivityIndicator color={styles.colors.black} /> : "Recupera lista repository"}
             </Button>
         </Surface>
